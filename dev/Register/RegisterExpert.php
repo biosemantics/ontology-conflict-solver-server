@@ -1,5 +1,5 @@
 <?php
-    require_once '../includes/DataBaseOperations.php';
+require_once '../../includes/DataBaseOperations.php';
 
     $response = array();
 
@@ -10,7 +10,7 @@
            // operate the data furter
 	       $db = new DataBaseOperations();
 
-		   $result = $db->createAuthor($_POST['username'], $_POST['password'], $_POST['firstname'], $_POST['lastname'], $_POST['email']);
+		   $result = $db->createExpert($_POST['username'], $_POST['password'], $_POST['firstname'], $_POST['lastname'], $_POST['email']);
 
 	       if($result == 1 ){
 

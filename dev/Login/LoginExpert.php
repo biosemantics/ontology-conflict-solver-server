@@ -1,6 +1,6 @@
 <?php 
 
-require_once '../includes/DataBaseOperations.php';
+require_once '../../includes/DataBaseOperations.php';
 
 $response = array(); 
 
@@ -10,12 +10,12 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
 		$db = new DataBaseOperations(); 
 
-		if($db->authorLogin($_POST['username'], $_POST['password'])){
+		if($db->expertLogin($_POST['username'], $_POST['password'])){
 
-			$user = $db->getAuthorByUsername($_POST['username']);
+			$user = $db->getExpertByUsername($_POST['username']);
 
 			$response['error']    = false; 
-			$response['authorId'] = $user['authorId'];
+			$response['expertId'] = $user['expertId'];
 			$response['email']    = $user['email'];
 			$response['username'] = $user['username'];
 		} else {
