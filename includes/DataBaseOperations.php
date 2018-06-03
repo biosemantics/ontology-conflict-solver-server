@@ -130,7 +130,7 @@
             return $stmt->get_result();
         }
 
-        public function getConflicts(){
+        public function getTasks(){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
                     ConfusingTerm.term as term, 
