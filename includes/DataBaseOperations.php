@@ -129,5 +129,20 @@
             $stmt->execute();
             return $stmt->get_result();
         }
+
+        public function getConflicts(){
+            $stmt = $this->con->prepare("
+                SELECT DISTINCT 
+                    ConfusingTerm.term as term, 
+                    Author.username    as username, 
+                    Author.authorId    as authorId
+                FROM J_Conflict_ConfusingTerm
+                JOIN ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
+                JOIN Conflict      on J_Conflict_ConfusingTerm.conflictId = Conflict.conflictId
+                JOIN Author        on Author.authorId = Conflict.authorId
+                ORDER BY term ASC;");
+            $stmt->execute();
+            return $stmt->get_result();
+        }
     }
 ?>
