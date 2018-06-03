@@ -119,5 +119,15 @@
             return $stmt->get_result()->fetch_assoc();
         }
 
+        public function getOptions($term){
+            $stmt = $this->con->prepare("SELECT DISTINCT ConfusingTerm.term as term, Option_.term as option_ FROM J_ConfusingTerm_Option
+                JOIN ConfusingTerm on J_ConfusingTerm_Option.termId = ConfusingTerm.termId
+                JOIN Option_ on J_ConfusingTerm_Option.optionId = Option_.optionId  
+                WHERE ConfusingTerm.term = ?
+                ORDER BY term ASC;");
+            $stmt->bind_param("s",$term);
+            $stmt->execute();
+            return $stmt->get_result();
+        }
     }
 ?>
