@@ -15,12 +15,6 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         $data[] = array("term"=>$term, "username"=>$username);
     }
     $response = $data;
-    $err['error'] = false;
-} else {
-    $err['error'] = true;
-    $err['message'] = "Error happened";
 }
-echo json_encode(array("task_data"=>$response,"error"=>$err));
-
-
+echo json_encode(array("task_data"=>$response);
 ?>
