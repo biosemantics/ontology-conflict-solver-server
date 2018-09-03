@@ -10,9 +10,21 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
     $result = $db->getTasks();
         
   	while( $row = $result->fetch_assoc() ) {
+
+  		$termId = $row['termId']; 
   		$term = $row['term']; 
+        $conflictId = $row['conflictId'];
         $username = $row['username'];
-        $data[] = array("term"=>$term, "username"=>$username);
+
+        $data[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username);
+        #$data[] = array("term"=>$term, "username"=>$username);
+
+
+
+		 //echo "termId: ". $row['termId']. "term: ". $row['term']. "conflictId: ". $row['conflictId']. "username: ". $row['username']."<br>";
+		    	
+
+
     }
     $response = $data;
 }

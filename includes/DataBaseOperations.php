@@ -134,7 +134,9 @@
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
                     ConfusingTerm.term as term, 
-                    Author.username    as username
+                    ConfusingTerm.termId as termId,
+                    Author.username as username,
+                    Conflict.conflictId as conflictId
                 FROM J_Conflict_ConfusingTerm
                 JOIN ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
                 JOIN Conflict      on J_Conflict_ConfusingTerm.conflictId = Conflict.conflictId
