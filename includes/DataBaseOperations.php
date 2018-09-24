@@ -119,7 +119,7 @@
             return $stmt->get_result()->fetch_assoc();
         }
 
-        public function getOptions($term){
+        /*public function getOptions($term){
             $stmt = $this->con->prepare("SELECT DISTINCT ConfusingTerm.term as term, Option_.term as option_ FROM J_ConfusingTerm_Option
                 JOIN ConfusingTerm on J_ConfusingTerm_Option.termId = ConfusingTerm.termId
                 JOIN Option_ on J_ConfusingTerm_Option.optionId = Option_.optionId  
@@ -128,13 +128,29 @@
             $stmt->bind_param("s",$term);
             $stmt->execute();
             return $stmt->get_result();
-        }
+        }*/
 
+        public function getOptions($termId){
+            $stmt = $this->con->prepare("
+                SELECT   
+                    ConfusingTerm.term as term,
+                    Option_.term as option_,
+                    Option_.definition as definition,
+                    Option_.picture as picture
+                FROM  J_ConfusingTerm_Option 
+                JOIN  ConfusingTerm on J_ConfusingTerm_Option.termId = ConfusingTerm.termId
+                JOIN  Option_       on J_ConfusingTerm_Option.optionId = Option_.optionId
+                WHERE ConfusingTerm.termId = ?");
+            $stmt->bind_param("s",$termId);
+            $stmt->execute();
+            return $stmt->get_result();
+        }
         public function getTasks(){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
                     ConfusingTerm.term as term, 
                     ConfusingTerm.termId as termId,
+                    ConfusingTerm.sentence as sentence,
                     Author.username as username,
                     Conflict.conflictId as conflictId
                 FROM J_Conflict_ConfusingTerm
