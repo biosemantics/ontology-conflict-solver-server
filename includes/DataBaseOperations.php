@@ -145,6 +145,7 @@
             $stmt->execute();
             return $stmt->get_result();
         }
+
         public function getTasks(){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
@@ -160,6 +161,14 @@
                 ORDER BY term ASC;");
             $stmt->execute();
             return $stmt->get_result();
+        }
+
+        public function submitDecision($termId, $choice, $writtenComment){
+            
+                $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`termId`,`choice`,`writtenComment`) VALUES (NULL, ?, ?, ?);");
+                $stmt->bind_param("sss",$termId,$choice,$writtenComment);
+            
+                $stmt->execute();
         }
     }
 ?>
