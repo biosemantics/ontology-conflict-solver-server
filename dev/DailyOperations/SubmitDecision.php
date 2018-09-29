@@ -7,7 +7,7 @@ $response = array();
 if($_SERVER['REQUEST_METHOD']=='POST'){
 
 	$db = new DataBaseOperations();
-    $result = $db->submitDecision($_POST['termId'], $_POST['choice'], $_POST['writtenComment']);
+    $result = $db->submitDecision($_POST['choice'], $_POST['writtenComment']);
 
     $response['error'] = false; 
 
