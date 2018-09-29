@@ -163,9 +163,9 @@
             return $stmt->get_result();
         }
 
-        public function submitDecision($termId, $choice, $writtenComment){
+        public function submitDecision($choice, $writtenComment){
             
-                $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`termId`,`choice`,`writtenComment`) VALUES (NULL, ?, ?, ?);");
+                $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`) VALUES (NULL, ?, ?, ?);");
                 $stmt->bind_param("sss",$termId,$choice,$writtenComment);
             
                 $stmt->execute();
