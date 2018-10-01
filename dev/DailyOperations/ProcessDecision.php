@@ -12,7 +12,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
     if( $resultSubmitDecision == 1){
     	
-    	$resultSubmitDecision = $db->populate_J_Conflict_Expert_Choice($_POST['conflictId'], $_POST['expertId']);
+    	$conflictId = (int)$_POST['conflictId'];
+    	$expertId   = (int)$_POST['expertId'];
+
+    	$resultSubmitDecision = $db->populate_J_Conflict_Expert_Choice($conflictId, $expertId);
      
        if($resultSubmitDecision == 1){
 
