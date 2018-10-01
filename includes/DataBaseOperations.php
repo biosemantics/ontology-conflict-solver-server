@@ -165,10 +165,31 @@
 
         public function submitDecision($choice, $writtenComment){
             
-                $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`) VALUES (NULL, ?, ?, ?);");
-                $stmt->bind_param("sss",$termId,$choice,$writtenComment);
+                $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`) VALUES (NULL, ?, ?);");
+                $stmt->bind_param("ss",$choice,$writtenComment);
             
-                $stmt->execute();
+                if($stmt->execute()){
+                    return 1;
+                }else{
+                    return 2;
+                }
         }
+
+        public function populate_J_Conflict_Expert_Choice($conflictId, $expertId){
+            
+                $choiceId = mysqli_insert_id($this->con);
+
+                $stmt = $this->con->prepare("INSERT INTO `J_Conflict_Expert_Choice` (`conflictId`,`expertId`,`choiceId`) VALUES (?, ?, ?);");
+                $stmt->bind_param("sss",$conflictId,$expertId,$choiceId);
+            
+                 if($stmt->execute()){
+                    return 1;
+                }else{
+                    return 2;
+                }
+        }
+
+
+
     }
 ?>
