@@ -16,8 +16,8 @@ $response = array();
             $picture    = $row['picture'];
            
             //echo "term: ". $row['term']. "  --->  " . $row['option_'].  " ---> ". $row['definition']. "<br>";
-            //$data[] = array("term"=>$term, "option_"=>$option_, "definition"=>$definition);
-            $data[] = array("option_"=>$option_, "definition"=>$definition, "picture"=>$picture);
+            $data[] = array("term"=>$term, "option_"=>$option_, "definition"=>$definition);
+            //$data[] = array("option_"=>$option_, "definition"=>$definition, "picture"=>$picture);
 	}
         $response = $data;
     }
