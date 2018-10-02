@@ -165,31 +165,44 @@
 
         public function submitDecision($choice, $writtenComment){
             
-                $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`) VALUES (NULL, ?, ?);");
-                $stmt->bind_param("ss",$choice,$writtenComment);
+            $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`) VALUES (NULL, ?, ?);");
+            $stmt->bind_param("ss",$choice,$writtenComment);
             
-                if($stmt->execute()){
-                    return 1;
-                }else{
-                    return 2;
-                }
+            if($stmt->execute()){
+                return 1;
+            }else{
+                return 2;
+            }
         }
 
         public function populate_J_Conflict_Expert_Choice($conflictId, $expertId){
             
-                $choiceId = mysqli_insert_id($this->con);
+            $choiceId = mysqli_insert_id($this->con);
 
-                $stmt = $this->con->prepare("INSERT INTO `J_Conflict_Expert_Choice` (`conflictId`,`expertId`,`choiceId`) VALUES (?, ?, ?);");
-                $stmt->bind_param("sss",$conflictId,$expertId,$choiceId);
+            $stmt = $this->con->prepare("INSERT INTO `J_Conflict_Expert_Choice` (`conflictId`,`expertId`,`choiceId`) VALUES (?, ?, ?);");
+            $stmt->bind_param("sss",$conflictId,$expertId,$choiceId);
             
-                 if($stmt->execute()){
-                    return 1;
-                }else{
-                    return 2;
-                }
+            if($stmt->execute()){
+                return 1;
+            }else{
+                return 2;
+            }
         }
+        public function populate_Conflict($conflictId){
+                     
+            $isSolved = 1;
+            $stmt = $this->con->prepare("
+                                         UPDATE Conflict 
+                                         SET isSolved = ? 
+                                         WHERE conflictId = ?");
 
-
-
+            $stmt->bind_param("ss",$isSolved,$conflictId);
+            
+            if($stmt->execute()){
+                return 1;
+            }else{
+                return 2;
+            }
+        }
     }
 ?>
