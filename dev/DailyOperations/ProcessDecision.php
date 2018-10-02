@@ -6,25 +6,33 @@ $response = array();
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
 
-	$db = new DataBaseOperations();
+    $db = new DataBaseOperations();
 
     $resultSubmitDecision = $db->submitDecision($_POST['choice'], $_POST['writtenComment']);
 
-    if( $resultSubmitDecision == 1){
+    if($resultSubmitDecision == 1){
     	
-    	$conflictId = (int)$_POST['conflictId'];
-    	$expertId   = (int)$_POST['expertId'];
+        $conflictId = (int)$_POST['conflictId'];
+        $expertId   = (int)$_POST['expertId'];
+        $resultSubmitDecision = $db->populate_J_Conflict_Expert_Choice($conflictId, $expertId);
 
-    	$resultSubmitDecision = $db->populate_J_Conflict_Expert_Choice($conflictId, $expertId);
-     
-       if($resultSubmitDecision == 1){
+        if($resultSubmitDecision == 1){
 
-           $response['error'] = false; 
+            $resultSubmitDecision = $db->populate_Conflict($conflictId);
 
-       } else {
+            if($resultSubmitDecision == 1){
 
-           $response['error'] = true; 
-       }
+       	        $response['error'] = false; 
+
+       	    } else {
+
+       	        $response['error'] = true; 
+       	    }
+
+        } else {
+
+            $response['error'] = true; 
+        }
 
     } else {
 
