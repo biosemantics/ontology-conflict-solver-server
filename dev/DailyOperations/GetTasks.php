@@ -14,7 +14,8 @@ $err = array();
             $conflictId = $row['conflictId'];
             $username = $row['username'];
             $sentence = $row['sentence'];
-            $data[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username, "sentence"=>$sentence);
+            $isSolved = $row['isSolved'];
+            $data[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username, "sentence"=>$sentence,"isSolved"=>$isSolved);
             //echo "termId: ". $row['termId']. "term: ". $row['term']. "conflictId: ". $row['conflictId']. "username: ". $row['username']. "sentence: ". $row['sentence']. "<br>";
         }
         $response = $data;
