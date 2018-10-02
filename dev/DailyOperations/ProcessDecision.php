@@ -22,21 +22,29 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
             if($resultSubmitDecision == 1){
 
-       	        $response['error'] = false; 
+       	        $response['error'] = false;
+       	        $response['message'] = "Submission Successful";		
+ 
 
        	    } else {
 
-       	        $response['error'] = true; 
+       	        $response['error'] = true;
+       	        $response['message'] = "Submission Failed";		
        	    }
 
         } else {
 
-            $response['error'] = true; 
+            $response['error'] = true;
+            $response['message'] = "Submission Failed";		
+ 
         }
 
     } else {
 
-           $response['error'] = true; 
+           $response['error'] = true;
+           $response['message'] = "Submission Failed";		
+
+ 
     }
 }
 
