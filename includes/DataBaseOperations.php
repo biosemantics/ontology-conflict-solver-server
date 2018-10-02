@@ -153,7 +153,8 @@
                     ConfusingTerm.termId as termId,
                     ConfusingTerm.sentence as sentence,
                     Author.username as username,
-                    Conflict.conflictId as conflictId
+                    Conflict.conflictId as conflictId,
+                    Conflict.isSolved as isSolved
                 FROM J_Conflict_ConfusingTerm
                 JOIN ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
                 JOIN Conflict      on J_Conflict_ConfusingTerm.conflictId = Conflict.conflictId
