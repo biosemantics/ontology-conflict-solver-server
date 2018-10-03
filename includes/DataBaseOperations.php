@@ -146,6 +146,17 @@
             return $stmt->get_result();
         }
 
+        public function getOptionImages($termId){
+            $stmt = $this->con->prepare("
+                SELECT   
+                    Option_.picture as picture
+                FROM  Option_ 
+                WHERE Option_.optionId = ?");
+                $stmt->bind_param("s",$termId);
+                $stmt->execute();
+            return $stmt->get_result();
+        }        
+
         public function getTasks(){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
