@@ -8,21 +8,22 @@ $response = array();
         $db = new DataBaseOperations();
 
         $result = $db->getOptionImages($_GET['ID']);
+        //$result = $db->getOptionImages(3);
 
-		//if($result->num_rows > 0){
-        while($row = $result->fetch_assoc()){
+        $result = mysqli_fetch_array($result);
 
-            //$imgData = $result->fetch_assoc();
+        $data = array();
+
+        $data["photo"] = $result["photo"];
+
+
+        $response["success"] = 1;
+        $response["image"] = array();
+
         
-            //Render image
-            //header("Content-type: image/jpg"); 
-            //echo $imgData['pic']; 
-
-            echo '<img src="data:image/jpeg;base64,'.base64_encode( $row['picture'] ).'"/>';
-
-        }
-        //else{
-        //    echo 'Image not found...';
-       // }
+        array_push($response["image"], $data);
+ 
+            
+        echo json_encode($response);    
     }
 ?>
