@@ -10,12 +10,14 @@ $response = array();
 		    
         //output data of each row
         while($row = $result->fetch_assoc()){
-            $term       = $row['term'];
-            $option_    = $row['option_'];
-            $definition = $row['definition'];
-            $picture    = $row['picture'];           
-            $data[] = array("term"=>$term, "option_"=>$option_, "definition"=>$definition);
-	}
+            $term         = $row['term'];
+            $option_      = $row['option_'];
+            $definition   = $row['definition'];
+            $image_link   = $row['image_link'];           
+            $data[] = array("option_"=>$option_, 
+                            "definition"=>$definition,
+                            "image_link"=>$image_link);
+        }
         $response = $data;
     }
     echo json_encode(array("options_data"=>$response));

@@ -134,9 +134,9 @@
             $stmt = $this->con->prepare("
                 SELECT   
                     ConfusingTerm.term as term,
-                    Option_.term as option_,
+                    Option_.option_ as option_,
                     Option_.definition as definition,
-                    Option_.picture as picture
+                    Option_.image_link as image_link
                 FROM  J_ConfusingTerm_Option 
                 JOIN  ConfusingTerm on J_ConfusingTerm_Option.termId = ConfusingTerm.termId
                 JOIN  Option_       on J_ConfusingTerm_Option.optionId = Option_.optionId
