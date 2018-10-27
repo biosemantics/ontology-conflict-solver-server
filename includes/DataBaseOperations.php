@@ -177,10 +177,10 @@
             return $stmt->get_result();
         }
 
-        public function submitDecision($choice, $writtenComment){
+        public function submitDecision($choice, $writtenComment, $voiceComment){
             
-            $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`) VALUES (NULL, ?, ?);");
-            $stmt->bind_param("ss",$choice,$writtenComment);
+            $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`,`voiceComment`) VALUES (NULL, ?, ?, ?);");
+            $stmt->bind_param("sss",$choice,$writtenComment,$voiceComment);
             
             if($stmt->execute()){
                 return 1;
