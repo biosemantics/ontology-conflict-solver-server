@@ -8,7 +8,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
     $db = new DataBaseOperations();
 
-    $resultSubmitDecision = $db->submitDecision($_POST['choice'], $_POST['writtenComment']);
+    $resultSubmitDecision = $db->submitDecision($_POST['choice'], $_POST['writtenComment'], $_POST['voiceComment']);
 
     if($resultSubmitDecision == 1){
     	
