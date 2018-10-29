@@ -2,7 +2,6 @@
     class DataBaseOperations{
 
     	private $con;
-
     	function __construct(){
 
     		require_once dirname(__FILE__). '/DataBaseConnect.php';
@@ -119,17 +118,6 @@
             return $stmt->get_result()->fetch_assoc();
         }
 
-        /*public function getOptions($term){
-            $stmt = $this->con->prepare("SELECT DISTINCT ConfusingTerm.term as term, Option_.term as option_ FROM J_ConfusingTerm_Option
-                JOIN ConfusingTerm on J_ConfusingTerm_Option.termId = ConfusingTerm.termId
-                JOIN Option_ on J_ConfusingTerm_Option.optionId = Option_.optionId  
-                WHERE ConfusingTerm.term = ?
-                ORDER BY term ASC;");
-            $stmt->bind_param("s",$term);
-            $stmt->execute();
-            return $stmt->get_result();
-        }*/
-
         public function getOptions($termId){
             $stmt = $this->con->prepare("
                 SELECT   
@@ -188,6 +176,7 @@
                 return 2;
             }
         }
+
 
         public function populate_J_Conflict_Expert_Choice($conflictId, $expertId){
             
