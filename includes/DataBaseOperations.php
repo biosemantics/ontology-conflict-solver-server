@@ -189,6 +189,23 @@
             }
         }
 
+        public function isExpertRegistered($expertId){
+
+            $stmt = $this->con->prepare("SELECT token FROM Expert WHERE expertId = ?");
+            $stmt->bind_param("s",$expertId);
+
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+
+            $row = $result->fetch_assoc();
+
+            if( is_null( $row["token"] ) ){
+                return 1;
+            }else{
+                return 2;
+            }
+        }
 
         public function registerToken($expertId, $token){
             
