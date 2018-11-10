@@ -74,7 +74,6 @@
         *
         *****************************************************************************/
 
-
     	public function createExpert($username, $pass, $firstname, $lastname, $email){
             
             if($this->isExpertExist($username,$email)){
@@ -118,6 +117,19 @@
             return $stmt->get_result()->fetch_assoc();
         }
 
+        /****************************************************************************
+        *
+        * Functions for the other database operations
+        *
+        * 1) getOptions
+        * 2) getOptionImages
+        * 3) getTasks
+        * 4) submitDecision
+        * 5) registerToken
+        * 6) populate_J_Conflict_Expert_Choice
+        * 7) populate_Conflict
+        *
+        *****************************************************************************/
         public function getOptions($termId){
             $stmt = $this->con->prepare("
                 SELECT   
@@ -178,6 +190,18 @@
         }
 
 
+        public function registerToken($expertId, $token){
+            
+            $stmt = $this->con->prepare("UPDATE `Expert` SET token = ? WHERE expertId = ?");
+            $stmt->bind_param("ss",$token,$expertId);
+            
+            if($stmt->execute()){
+                return 1;
+            }else{
+                return 2;
+            }
+        }
+
         public function populate_J_Conflict_Expert_Choice($conflictId, $expertId){
             
             $choiceId = mysqli_insert_id($this->con);
@@ -191,6 +215,7 @@
                 return 2;
             }
         }
+
         public function populate_Conflict($conflictId){
                      
             $isSolved = 1;
@@ -206,6 +231,14 @@
             }else{
                 return 2;
             }
+        }
+
+        public function getAllTokens(){
+                     
+            $stmt = $this->con->prepare("SELECT token FROM Expert");
+
+            $stmt->execute();
+            return $stmt->get_result();
         }
     }
 ?>
