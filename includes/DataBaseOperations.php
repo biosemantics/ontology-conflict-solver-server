@@ -250,6 +250,28 @@
             }
         }
 
+        public function callTrigger(){
+
+            $sql = "CREATE TRIGGER trigger1 AFTER INSERT ON J_Conflict_Expert_Choice
+
+                        FOR EACH ROW BEGIN 
+
+                            INSERT INTO `J_Conflict_Expert_Choice` (
+
+                                 `conflictId`,
+                                 `expertId`,
+                                 `choiceId`) 
+                            VALUES (
+                                 3, 
+                                 3, 
+                                 3);
+                        END;
+                    ";
+            $this->con->prepare($sql);
+            $this->con->multi_query($sql);
+
+        }
+
         public function getAllTokens(){
                      
             $stmt = $this->con->prepare("SELECT token FROM Expert");
@@ -257,5 +279,15 @@
             $stmt->execute();
             return $stmt->get_result();
         }
+
+
+        public function getRelatedTokens(){
+
+            $stmt = $this->con->prepare("SELECT token FROM Expert");
+
+            $stmt->execute();
+            return $stmt->get_result();
+        }
+
     }
 ?>
