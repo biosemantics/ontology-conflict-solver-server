@@ -227,9 +227,9 @@
             $stmt->bind_param("sss",$conflictId,$expertId,$choiceId);
             
             if($stmt->execute()){
-                return 1;
+                return $choiceId;
             }else{
-                return 2;
+                return -1;
             }
         }
 
