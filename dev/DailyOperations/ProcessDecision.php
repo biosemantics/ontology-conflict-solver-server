@@ -18,14 +18,24 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
         if($resultSubmitDecision == 1){
 
-            $resultSubmitDecision = $db->populate_Conflict($conflictId);
-
-            if($resultSubmitDecision == 1){
+            $choiceId = $db->populate_Conflict($conflictId);
+           
+            if($choiceId != -1){
 
        	        $response['error'] = false;
-       	        $response['message'] = "Submission Successful";		
- 
+       	        $response['message'] = "Submission Successful";
 
+                $result = $db->getRelatedTokens($conflictId, $expertId);	
+
+                /*//output data of each row
+                while($row = $result->fetch_assoc()){
+                  $term         = $row['expertId'];
+                  $option_      = $row['username'];
+                  $definition   = $row['token'];
+                  $data[] = array("option_"=>$option_, 
+                            "definition"=>$definition,
+                            "image_link"=>$image_link);*/
+                //}     
        	    } else {
 
        	        $response['error'] = true;
