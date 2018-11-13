@@ -258,14 +258,18 @@
             return $stmt->get_result();
         }
 
-
-        public function getRelatedTokens(){
-
-            $stmt = $this->con->prepare("SELECT token FROM Expert");
-
+        public function getExpertsGivenConflict($conflictId, $expertId){
+            $stmt = $this->con->prepare("
+                SELECT 
+                       Expert.expertId as expertId,
+                       Expert.username as username,
+                       Expert.token as token 
+                FROM Expert 
+                JOIN J_Conflict_Expert_Choice on J_Conflict_Expert_Choice.expertId = Expert.expertId 
+                WHERE J_Conflict_Expert_Choice.conflictId = ? AND Expert.expertId != ?");
+            $stmt->bind_param("ss",$conflictId, $expertId);
             $stmt->execute();
             return $stmt->get_result();
-        }
-
+        }     
     }
 ?>
