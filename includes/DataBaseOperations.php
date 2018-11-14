@@ -159,7 +159,24 @@
             return $stmt->get_result();
         }        
 
-        public function getTasks(){
+        public function getTasksSolved(){
+            $stmt = $this->con->prepare("
+                SELECT DISTINCT 
+                    ConfusingTerm.term as term, 
+                    ConfusingTerm.termId as termId,
+                    ConfusingTerm.sentence as sentence,
+                    Author.username as username,
+                    Conflict.conflictId as conflictId
+                FROM J_Conflict_ConfusingTerm
+                JOIN ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
+                JOIN Conflict      on J_Conflict_ConfusingTerm.conflictId = Conflict.conflictId
+                JOIN Author        on Author.authorId = Conflict.authorId
+                ORDER BY term ASC;");
+            $stmt->execute();
+            return $stmt->get_result();
+        }
+
+        public function getTasksUnsolved(){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
                     ConfusingTerm.term as term, 
@@ -271,31 +288,24 @@
             $stmt->execute();
             return $stmt->get_result();
         }
-        public function send_notification($tokens, $message){
 
-            $url = 'https://fcm.googleapis.com/fcm/send';
-            $fields = array('registration_ids' => $tokens,
-                        'data' => $message );
+        public function getRelatedTokens(){
 
-            $headers = array('Authorization:key = AAAAYXS_iEo:APA91bGZ50RhB0sZIBf6vmXohxOd_wJsDVCQPJCMeqtujIfG9JhLPUpA5C4Q_OFW-nacNXHfoSJPjJKMagr54b9i4JUFpcXocf2oAGzrVaTMsKpBNufnNAGRRQrO-CHGJ3eSdjnv9twF',
-                         'Content-Type: application/json');
-            $ch = curl_init();
+            $stmt = $this->con->prepare("
+                SELECT   
+                    ConfusingTerm.term as term,
+                    Option_.option_ as option_,
+                    Option_.definition as definition,
+                    Option_.image_link as image_link
+                FROM  J_ConfusingTerm_Option 
+                JOIN  ConfusingTerm on J_ConfusingTerm_Option.termId = ConfusingTerm.termId
+                JOIN  Option_       on J_ConfusingTerm_Option.optionId = Option_.optionId
+                WHERE ConfusingTerm.termId = ?");
+            $stmt->bind_param("s",$termId);
+            $stmt->execute();
+            return $stmt->get_result();
 
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);  
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        }
 
-            $result = curl_exec($ch);
-            
-            if ($result === FALSE) {
-                die('Curl failed: ' . curl_error($ch));
-            }
-            curl_close($ch);
-            return $result;
-        }       
     }
 ?>
