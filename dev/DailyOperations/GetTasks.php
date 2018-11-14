@@ -13,22 +13,22 @@ $data2 = array();
         $resultSolved = $db->getTasksSolved($expertId);
         $resultUnsolved = $db->getTasksUnsolved($expertId);
 
-        while( $row = $resultSolved->fetch_assoc() ) {
-            $termId = $row['termId'];
-            $term = $row['term'];
-            $conflictId = $row['conflictId'];
-            $username = $row['username'];
-            $sentence = $row['sentence'];
+        while( $row1 = $resultSolved->fetch_assoc() ) {
+            $termId = $row1['termId'];
+            $term = $row1['term'];
+            $conflictId = $row1['conflictId'];
+            $username = $row1['username'];
+            $sentence = $row1['sentence'];
             $isSolved = 1;
             $data1[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username, "sentence"=>$sentence,"isSolved"=>$isSolved);
         }
 
-        while( $row = $resultUnsolved->fetch_assoc() ) {
-            $termId = $row['termId'];
-            $term = $row['term'];
-            $conflictId = $row['conflictId'];
-            $username = $row['username'];
-            $sentence = $row['sentence'];
+        while( $row2 = $resultUnsolved->fetch_assoc() ) {
+            $termId = $row2['termId'];
+            $term = $row2['term'];
+            $conflictId = $row2['conflictId'];
+            $username = $row2['username'];
+            $sentence = $row2['sentence'];
             $isSolved = 0;
             $data2[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username, "sentence"=>$sentence,"isSolved"=>$isSolved);
         }
