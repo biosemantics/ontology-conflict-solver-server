@@ -168,9 +168,10 @@
                     Author.username as username,
                     Conflict.conflictId as conflictId
                 FROM J_Conflict_ConfusingTerm
-                JOIN ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
-                JOIN Conflict      on J_Conflict_ConfusingTerm.conflictId = Conflict.conflictId
-                JOIN Author        on Author.authorId = Conflict.authorId
+                JOIN ConfusingTerm                 on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
+                JOIN Conflict                      on J_Conflict_ConfusingTerm.conflictId = Conflict.conflictId
+                JOIN J_Conflict_Expert_Choice      on J_Conflict_Expert_Choice.conflictId = Conflict.conflictId
+                JOIN Author                        on Author.authorId = Conflict.authorId
                 ORDER BY term ASC;");
             $stmt->execute();
             return $stmt->get_result();
@@ -183,12 +184,12 @@
                     ConfusingTerm.termId as termId,
                     ConfusingTerm.sentence as sentence,
                     Author.username as username,
-                    Conflict.conflictId as conflictId,
-                    Conflict.isSolved as isSolved
+                    Conflict.conflictId as conflictId
                 FROM J_Conflict_ConfusingTerm
-                JOIN ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
-                JOIN Conflict      on J_Conflict_ConfusingTerm.conflictId = Conflict.conflictId
-                JOIN Author        on Author.authorId = Conflict.authorId
+                JOIN ConfusingTerm                 on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
+                JOIN Conflict                      on J_Conflict_ConfusingTerm.conflictId = Conflict.conflictId
+                JOIN J_Conflict_Expert_Choice      on J_Conflict_Expert_Choice.conflictId != Conflict.conflictId
+                JOIN Author                        on Author.authorId = Conflict.authorId
                 ORDER BY term ASC;");
             $stmt->execute();
             return $stmt->get_result();
