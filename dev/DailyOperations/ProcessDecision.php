@@ -14,34 +14,49 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     	
         $conflictId = (int)$_POST['conflictId'];
         $expertId   = (int)$_POST['expertId'];
+                    
         $choiceId = $db->populate_J_Conflict_Expert_Choice($conflictId, $expertId);
-           
+
         if($choiceId != -1){
 
-       	    $response['error'] = false;
-       	    $response['message'] = "Submission Successful";
+            $resultSubmitDecision = $db->populate_J_Conflict_Expert($conflictId, $expertId);
 
-            $result = $db->getRelatedTokens($conflictId, $expertId);	
+            if($resultSubmitDecision == 1){
 
-            /*//output data of each row
-            while($row = $result->fetch_assoc()){
-            $term         = $row['expertId'];
-            $option_      = $row['username'];
-            $definition   = $row['token'];
-            $data[] = array("option_"=>$option_, 
-            "definition"=>$definition,
-            "image_link"=>$image_link);*/
-            //}     
+           	    $response['error'] = false;
+           	    $response['message'] = "Submission Successful";
+
+                //$result = $db->getRelatedTokens($conflictId, $expertId);	
+
+                /*//output data of each row
+                while($row = $result->fetch_assoc()){
+                $term         = $row['expertId'];
+                $option_      = $row['username'];
+                $definition   = $row['token'];
+                $data[] = array("option_"=>$option_, 
+                "definition"=>$definition,
+                "image_link"=>$image_link);*/
+                //}   
+
+            } else {
+
+           	    $response['error'] = true;
+           	    $response['message'] = "Submission Failed";		
+
+           	}
+
         } else {
-          
-       	    $response['error'] = true;
-       	    $response['message'] = "Submission Failed";		
-       	}
+
+          $response['error'] = true;
+          $response['message'] = "Submission Failed";   
+
+        }
 
     } else {
 
-           $response['error'] = true;
-           $response['message'] = "Submission Failed";		
+      $response['error'] = true;
+      $response['message'] = "Submission Failed";		
+
     }
 }
 
