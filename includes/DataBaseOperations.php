@@ -257,6 +257,22 @@
             }
         }
 
+        public function populate_J_Conflict_Expert($conflictId,$expertId){
+                     
+            $isSolved = 1;
+            $stmt = $this->con->prepare("
+                                         UPDATE J_Conflict_Expert 
+                                         SET isSolved = ? 
+                                         WHERE conflictId = ? AND expertId = ?");
+             $stmt->bind_param("sss",$isSolved,$conflictId,$expertId);
+            
+            if($stmt->execute()){
+                return 1;
+            }else{
+                return 2;
+            }
+        }
+
 
         public function getAllTokens(){
                      
