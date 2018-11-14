@@ -159,7 +159,7 @@
             return $stmt->get_result();
         }        
 
-        public function getTasksSolved(){
+        public function getTasksSolved($expertId){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
                     ConfusingTerm.term as term, 
@@ -172,12 +172,14 @@
                 JOIN J_Conflict_Expert_Choice  on Conflict.conflictId = J_Conflict_Expert_Choice.conflictId
                 JOIN J_Conflict_ConfusingTerm  on Conflict.conflictId = J_Conflict_ConfusingTerm.conflictId
                 JOIN ConfusingTerm             on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
+                WHERE J_Conflict_Expert_Choice.expertId = ?
                 ORDER BY term ASC;");
+            $stmt->bind_param("s",$expertId);
             $stmt->execute();
             return $stmt->get_result();
         }
 
-        public function getTasksUnsolved(){
+        public function getTasksUnsolved($expertId){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
                     ConfusingTerm.term as term, 
@@ -190,7 +192,10 @@
                 JOIN J_Conflict_Expert_Choice  on Conflict.conflictId != J_Conflict_Expert_Choice.conflictId
                 JOIN J_Conflict_ConfusingTerm  on Conflict.conflictId = J_Conflict_ConfusingTerm.conflictId
                 JOIN ConfusingTerm             on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
+                WHERE J_Conflict_Expert_Choice.expertId = ?
                 ORDER BY term ASC;");
+                $stmt->bind_param("s",$expertId);
+                    
             $stmt->execute();
             return $stmt->get_result();
         }
