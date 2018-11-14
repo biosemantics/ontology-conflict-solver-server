@@ -256,22 +256,6 @@
             }
         }
 
-        public function populate_Conflict($conflictId){
-                     
-            $isSolved = 1;
-            $stmt = $this->con->prepare("
-                                         UPDATE Conflict 
-                                         SET isSolved = ? 
-                                         WHERE conflictId = ?");
-
-            $stmt->bind_param("ss",$isSolved,$conflictId);
-            
-            if($stmt->execute()){
-                return 1;
-            }else{
-                return 2;
-            }
-        }
 
         public function getAllTokens(){
                      
