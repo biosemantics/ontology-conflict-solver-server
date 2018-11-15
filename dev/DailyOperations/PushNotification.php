@@ -14,6 +14,6 @@
 	}
 
 	$message = array("message" => " Conflict Solver has an update");
-	$message_status = $db->send_notification($tokens, $message);
+	$message_status = $db->sendNotification($tokens, $message);
 	echo $message_status;
  ?>
