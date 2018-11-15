@@ -6,9 +6,13 @@ $response = array();
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
 
+    $choice         = $_POST['choice'];
+    //$writtenComment = $_POST['writtenComment'];
+    //$voiceComment   = $_POST['voiceComment'];
+
     $db = new DataBaseOperations();
 
-    $resultSubmitDecision = $db->submitDecision($_POST['choice'], $_POST['writtenComment'], $_POST['voiceComment']);
+    $resultSubmitDecision = $db->submitDecision($choice, $_POST['writtenComment'], $_POST['voiceComment']);
 
     if($resultSubmitDecision == 1){
     	
@@ -37,10 +41,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                     }
                 }
 
-                $row = $db->getExpertUsernameById($expertId);
+                $rowUsername = $db->getExpertUsernameById($expertId);
+                $rowTerm     = $db->getTermGivenConflict($conflictId);
 
-
-                $text = $row['username'] . " answered xxx conflicts as yyy! ";
+                $text = $rowUsername['username'] . " answered " . $rowTerm['term'] . " conflict as " . $choice;
 
                 $message = array("message" => $text);
                 $message_status = $db->sendNotification($tokens, $message);
