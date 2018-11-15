@@ -231,6 +231,15 @@
             }
         }
 
+        public function getExpertUsername($expertId){
+
+            $stmt = $this->con->prepare("SELECT username FROM Expert WHERE expertId = ?");
+            $stmt->bind_param("s",$expertId);
+
+            $stmt->execute();
+
+            return $stmt->get_result();
+        }
 
         public function registerToken($expertId, $token){
             
