@@ -26,17 +26,22 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
            	    $response['error'] = false;
            	    $response['message'] = "Submission Successful";
 
-                //$result = $db->getRelatedTokens($conflictId, $expertId);	
+                $result = $db->getExpertsGivenConflict($conflictId, $expertId);	
+                $tokens = array();
 
-                /*//output data of each row
-                while($row = $result->fetch_assoc()){
-                $term         = $row['expertId'];
-                $option_      = $row['username'];
-                $definition   = $row['token'];
-                $data[] = array("option_"=>$option_, 
-                "definition"=>$definition,
-                "image_link"=>$image_link);*/
-                //}   
+                if(mysqli_num_rows($result) > 0 ){
+
+                    // Output the data of each row
+                    while($row = $result->fetch_assoc()){
+                        $tokens[]   = $row['token'];
+                    }
+                }
+
+                $message = array("message" => " Conflict Solver has an update");
+                $message_status = $db->sendNotification($tokens, $message);
+                echo $message_status;   
+
+
 
             } else {
 
