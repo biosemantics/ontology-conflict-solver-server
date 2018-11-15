@@ -231,6 +231,7 @@
             }
         }
 
+
         public function registerToken($expertId, $token){
             
             $stmt = $this->con->prepare("UPDATE `Expert` SET token = ? WHERE expertId = ?");
@@ -305,12 +306,11 @@
         public function getExpertsGivenConflict($conflictId, $expertId){
             $stmt = $this->con->prepare("
                 SELECT 
-                       Expert.expertId as expertId,
-                       Expert.username as username,
                        Expert.token as token 
                 FROM Expert 
-                JOIN J_Conflict_Expert_Choice on J_Conflict_Expert_Choice.expertId = Expert.expertId 
-                WHERE J_Conflict_Expert_Choice.conflictId = ? AND Expert.expertId != ?");
+                JOIN J_Conflict_Expert on J_Conflict_Expert.expertId = Expert.expertId 
+                WHERE J_Conflict_Expert.conflictId = ? AND Expert.expertId != ?
+            ");
             $stmt->bind_param("ss",$conflictId, $expertId);
             $stmt->execute();
             return $stmt->get_result();
