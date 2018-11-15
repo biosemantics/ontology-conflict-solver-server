@@ -37,7 +37,12 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                     }
                 }
 
-                $message = array("message" => " Conflict Solver has an update");
+                $row = $db->getExpertUsernameById($expertId);
+
+
+                $text = $row['username'] . " answered xxx conflicts as yyy! ";
+
+                $message = array("message" => $text);
                 $message_status = $db->sendNotification($tokens, $message);
                 echo $message_status;   
 
