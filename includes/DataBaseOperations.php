@@ -169,7 +169,7 @@
                     Conflict.conflictId as conflictId
                 FROM Conflict
                 JOIN Author                    on Conflict.authorId    = Author.authorId
-                JOIN J_Conflict_Expert         on Conflict.conflictId != J_Conflict_Expert.conflictId
+                JOIN J_Conflict_Expert         on Conflict.conflictId  = J_Conflict_Expert.conflictId
                 JOIN J_Conflict_ConfusingTerm  on Conflict.conflictId  = J_Conflict_ConfusingTerm.conflictId
                 JOIN ConfusingTerm             on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
                 WHERE J_Conflict_Expert.expertId = ? AND J_Conflict_Expert.isSolved = 1
