@@ -311,8 +311,8 @@
 
         public function getExpertsGivenConflict($conflictId, $expertId){
             $stmt = $this->con->prepare("
-                SELECT 
-                       Expert.token as token 
+                SELECT
+                    Expert.token as token 
                 FROM Expert 
                 JOIN J_Conflict_Expert on J_Conflict_Expert.expertId = Expert.expertId 
                 WHERE J_Conflict_Expert.conflictId = ? AND Expert.expertId != ?
@@ -322,21 +322,17 @@
             return $stmt->get_result();
         }
 
-        public function getRelatedTokens(){
+        public function getTermGivenConflict($conflictId){
 
             $stmt = $this->con->prepare("
                 SELECT   
-                    ConfusingTerm.term as term,
-                    Option_.option_ as option_,
-                    Option_.definition as definition,
-                    Option_.image_link as image_link
-                FROM  J_ConfusingTerm_Option 
-                JOIN  ConfusingTerm on J_ConfusingTerm_Option.termId = ConfusingTerm.termId
-                JOIN  Option_       on J_ConfusingTerm_Option.optionId = Option_.optionId
-                WHERE ConfusingTerm.termId = ?");
-            $stmt->bind_param("s",$termId);
+                    ConfusingTerm.term as term
+                FROM  ConfusingTerm 
+                JOIN  J_Conflict_ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
+                WHERE J_Conflict_ConfusingTerm.conflictId = ?");
+            $stmt->bind_param("s",$conflictId);
             $stmt->execute();
-            return $stmt->get_result();
+            return $stmt->get_result()->fetch_assoc();
 
         }
 
