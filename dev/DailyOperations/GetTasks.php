@@ -10,8 +10,8 @@ $data2 = array();
         $expertId = $_POST["expertId"];
 
         $db = new DataBaseOperations();
-        $resultSolved = $db->getTasksSolved($expertId);
-        $resultUnsolved = $db->getTasksUnsolved($expertId);
+        $resultSolved = $db->getSolvedTasks($expertId);
+        $resultUnsolved = $db->getUnsolvedTasks($expertId);
 
         while( $row1 = $resultSolved->fetch_assoc() ) {
             $termId = $row1['termId'];
