@@ -48,7 +48,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
                 $message = array("message" => $text);
                 $message_status = $db->sendNotification($tokens, $message);
-                echo $message_status;   
+//                echo $message_status;   
 
 
 
