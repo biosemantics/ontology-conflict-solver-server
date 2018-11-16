@@ -30,7 +30,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
            	    $response['error'] = false;
            	    $response['message'] = "Submission Successful";
 
-                $result = $db->getExpertsGivenConflict($conflictId, $expertId);	
+                $result = $db->getExpertsByConflict($conflictId, $expertId);	
                 $tokens = array();
 
                 if(mysqli_num_rows($result) > 0 ){
@@ -42,7 +42,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                 }
 
                 $rowUsername = $db->getExpertUsernameById($expertId);
-                $rowTerm     = $db->getTermGivenConflict($conflictId);
+                $rowTerm     = $db->getTermByConflict($conflictId);
 
                 $text = $rowUsername['username'] . " answered " . $rowTerm['term'] . " conflict as " . $choice;
 
