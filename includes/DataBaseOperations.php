@@ -13,10 +13,10 @@
         *
         * Functions for Author Table
         *
-        * 1) createAuthor
-        * 2) authorLogin
-        * 3) isAuthorExist
-        * 4) getAuthorByUsername
+        * 1) createAuthor($username, $pass, $firstname, $lastname, $email)
+        * 2) authorLogin($username, $pass)
+        * 3) isAuthorExist($username, $email)
+        * 4) getAuthorByUsername($username)
         *
         *****************************************************************************/
 
@@ -67,19 +67,18 @@
         *
         * Functions for Expert Table
         *
-        * 1) createExpert
-        * 2) expertLogin
-        * 3) isExpertExist
-        * 4) getExpertByUsername
+        * 1) createExpert($username, $pass, $firstname, $lastname, $email)
+        * 2) expertLogin($username, $pass)
+        * 3) isExpertExist($username, $email)
+        * 4) getExpertByUsername($username)
+        * 5) getExpertUsernameById($expertId)
+        * 6) getExpertsByConflict($conflictId, $expertId)
         *
         *****************************************************************************/
 
     	public function createExpert($username, $pass, $firstname, $lastname, $email){
-            
             if($this->isExpertExist($username,$email)){
-
                 return 0;
-
             }else{
                 $password = md5($pass);
                 $stmt = $this->con->prepare("INSERT INTO `Expert` (`expertId`,`username`,`password`,`firstname`,`lastname`,`email`) VALUES (NULL, ?, ?, ?, ?, ?);");
@@ -124,19 +123,50 @@
             return $stmt->get_result()->fetch_assoc();
         }
 
+        public function getExpertsByConflict($conflictId, $expertId){
+            $stmt = $this->con->prepare("
+                SELECT
+                    Expert.token as token 
+                FROM Expert 
+                JOIN J_Conflict_Expert on J_Conflict_Expert.expertId = Expert.expertId 
+                WHERE J_Conflict_Expert.conflictId = ? AND Expert.expertId != ?
+            ");
+            $stmt->bind_param("ss",$conflictId, $expertId);
+            $stmt->execute();
+            return $stmt->get_result();
+        }
+
         /****************************************************************************
         *
         * Functions for the other database operations
         *
-        * 1) getOptions
-        * 2) getOptionImages
-        * 3) getTasks
-        * 4) submitDecision
-        * 5) registerToken
-        * 6) populate_J_Conflict_Expert_Choice
-        * 7) populate_Conflict
+        *  1) getTermByConflict($conflictId)
+        *  2) getOptions($termId){
+        *  3) getOptionImages($termId)
+        *  4) getSolvedTasks($expertId)
+        *  5) getUnsolvedTasks($expertId)
+        *  6) submitDecision($choice, $writtenComment, $voiceComment)
+        *  7) isExpertRegistered($expertId)
+        *  8) registerToken($expertId, $token)
+        *  9) populate_J_Conflict_Expert_Choice($conflictId, $expertId)
+        * 10) populate_J_Conflict_Expert($conflictId,$expertId)
+        * 11) sendNotification($tokens, $message)
         *
         *****************************************************************************/
+        public function getTermByConflict($conflictId){
+
+            $stmt = $this->con->prepare("
+                SELECT   
+                    ConfusingTerm.term as term
+                FROM  ConfusingTerm 
+                JOIN  J_Conflict_ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
+                WHERE J_Conflict_ConfusingTerm.conflictId = ?");
+            $stmt->bind_param("s",$conflictId);
+            $stmt->execute();
+            return $stmt->get_result()->fetch_assoc();
+
+        }
+
         public function getOptions($termId){
             $stmt = $this->con->prepare("
                 SELECT   
@@ -166,7 +196,7 @@
             return $stmt->get_result();
         }        
 
-        public function getTasksSolved($expertId){
+        public function getSolvedTasks($expertId){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
                     ConfusingTerm.term as term, 
@@ -187,7 +217,7 @@
             return $stmt->get_result();
         }
 
-        public function getTasksUnsolved($expertId){
+        public function getUnsolvedTasks($expertId){
             $stmt = $this->con->prepare("
                 SELECT DISTINCT 
                     ConfusingTerm.term as term, 
@@ -209,7 +239,6 @@
         }
 
         public function submitDecision($choice, $writtenComment, $voiceComment){
-            
             $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`,`voiceComment`) VALUES (NULL, ?, ?, ?);");
             $stmt->bind_param("sss",$choice,$writtenComment,$voiceComment);
             
@@ -221,14 +250,10 @@
         }
 
         public function isExpertRegistered($expertId){
-
             $stmt = $this->con->prepare("SELECT token FROM Expert WHERE expertId = ?");
             $stmt->bind_param("s",$expertId);
-
             $stmt->execute();
-
             $result = $stmt->get_result();
-
             $row = $result->fetch_assoc();
 
             if( is_null( $row["token"] ) ){
@@ -239,7 +264,6 @@
         }
 
         public function registerToken($expertId, $token){
-            
             $stmt = $this->con->prepare("UPDATE `Expert` SET token = ? WHERE expertId = ?");
             $stmt->bind_param("ss",$token,$expertId);
             
@@ -251,9 +275,7 @@
         }
 
         public function populate_J_Conflict_Expert_Choice($conflictId, $expertId){
-            
             $choiceId = mysqli_insert_id($this->con);
-
             $stmt = $this->con->prepare("INSERT INTO `J_Conflict_Expert_Choice` (`conflictId`,`expertId`,`choiceId`) VALUES (?, ?, ?);");
             $stmt->bind_param("sss",$conflictId,$expertId,$choiceId);
             
@@ -279,6 +301,7 @@
                 return 2;
             }
         }
+
         public function sendNotification($tokens, $message){
             $url = 'https://fcm.googleapis.com/fcm/send';
             $fields = array('registration_ids' => $tokens,
@@ -299,42 +322,6 @@
             }
             curl_close($ch);
             return $result;
-        }       
-    
-        public function getAllTokens(){
-                     
-            $stmt = $this->con->prepare("SELECT token FROM Expert");
-
-            $stmt->execute();
-            return $stmt->get_result();
-        }
-
-        public function getExpertsGivenConflict($conflictId, $expertId){
-            $stmt = $this->con->prepare("
-                SELECT
-                    Expert.token as token 
-                FROM Expert 
-                JOIN J_Conflict_Expert on J_Conflict_Expert.expertId = Expert.expertId 
-                WHERE J_Conflict_Expert.conflictId = ? AND Expert.expertId != ?
-            ");
-            $stmt->bind_param("ss",$conflictId, $expertId);
-            $stmt->execute();
-            return $stmt->get_result();
-        }
-
-        public function getTermGivenConflict($conflictId){
-
-            $stmt = $this->con->prepare("
-                SELECT   
-                    ConfusingTerm.term as term
-                FROM  ConfusingTerm 
-                JOIN  J_Conflict_ConfusingTerm on J_Conflict_ConfusingTerm.termId = ConfusingTerm.termId
-                WHERE J_Conflict_ConfusingTerm.conflictId = ?");
-            $stmt->bind_param("s",$conflictId);
-            $stmt->execute();
-            return $stmt->get_result()->fetch_assoc();
-
-        }
-
+        }    
     }
 ?>
