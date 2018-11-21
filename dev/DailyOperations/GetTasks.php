@@ -3,8 +3,8 @@ require_once '../../includes/DataBaseOperations.php';
 
 $response = array(); 
 $err = array();
-$data1 = array();
-$data2 = array();
+$solvedData   = array();
+$unsolvedData = array();
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         $expertId = $_POST["expertId"];
@@ -13,27 +13,31 @@ $data2 = array();
         $resultSolved = $db->getSolvedTasks($expertId);
         $resultUnsolved = $db->getUnsolvedTasks($expertId);
 
-        while( $row1 = $resultSolved->fetch_assoc() ) {
-            $termId = $row1['termId'];
-            $term = $row1['term'];
-            $conflictId = $row1['conflictId'];
-            $username = $row1['username'];
-            $sentence = $row1['sentence'];
-            $isSolved = 1;
-            $data1[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username, "sentence"=>$sentence,"isSolved"=>$isSolved);
+        while( $solved = $resultSolved->fetch_assoc() ) {
+            $termId     = $solved['termId'];
+            $term       = $solved['term'];
+            $conflictId = $solved['conflictId'];
+            $username   = $solved['username'];
+            $sentence   = $solved['sentence'];
+            $isSolved   = 1;
+            $result     = $db->countSolvedConflicts($conflictId);
+            $count      = $result['COUNT(conflictId)'];
+            $solvedData[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username, "sentence"=>$sentence,"isSolved"=>$isSolved, "count"=>$count);
         }
 
-        while( $row2 = $resultUnsolved->fetch_assoc() ) {
-            $termId = $row2['termId'];
-            $term = $row2['term'];
-            $conflictId = $row2['conflictId'];
-            $username = $row2['username'];
-            $sentence = $row2['sentence'];
-            $isSolved = 0;
-            $data2[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username, "sentence"=>$sentence,"isSolved"=>$isSolved);
+        while( $unsolved = $resultUnsolved->fetch_assoc() ) {
+            $termId     = $unsolved['termId'];
+            $term       = $unsolved['term'];
+            $conflictId = $unsolved['conflictId'];
+            $username   = $unsolved['username'];
+            $sentence   = $unsolved['sentence'];
+            $isSolved   = 0;
+            $result     = $db->countSolvedConflicts($conflictId);
+            $count      = $result['COUNT(conflictId)'];            
+            $unsolvedData[] = array("termId"=>$termId, "term"=>$term, "conflictId"=>$conflictId, "username"=>$username, "sentence"=>$sentence,"isSolved"=>$isSolved, "count"=>$count);
         }
 
-        $response = array_merge($data1, $data2);
+        $response = array_merge($solvedData, $unsolvedData);
 
         if( empty($response) ){
 
