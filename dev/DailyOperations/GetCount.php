@@ -11,8 +11,8 @@ require_once '../../includes/DataBaseOperations.php';
 	        $result = $db->countUnsolvedConflictsByExpert($expertId);
             
             $count = $result['COUNT(conflictId)'];
-            $unsolvedData[] = array("$count"=>$$count);
-            
+            $unsolvedData[] = array("$count"=>$count);
+
 	        echo json_encode($unsolvedData);		                 
 		}
 	}
