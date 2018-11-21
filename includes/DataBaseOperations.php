@@ -73,6 +73,7 @@
         * 4) getExpertByUsername($username)
         * 5) getExpertUsernameById($expertId)
         * 6) getExpertsByConflict($conflictId, $expertId)
+        * 7) function setTasksToExpert()
         *
         *****************************************************************************/
 
@@ -165,12 +166,13 @@
         *  3) getOptionImages($termId)
         *  4) getSolvedTasks($expertId)
         *  5) getUnsolvedTasks($expertId)
-        *  6) submitDecision($choice, $writtenComment, $voiceComment)
-        *  7) isExpertRegistered($expertId)
-        *  8) registerToken($expertId, $token)
-        *  9) populate_J_Conflict_Expert_Choice($conflictId, $expertId)
-        * 10) populate_J_Conflict_Expert($conflictId,$expertId)
-        * 11) sendNotification($tokens, $message)
+        *  6) countSolvedConflicts($conflictId){
+        *  7) submitDecision($choice, $writtenComment, $voiceComment)
+        *  8) isExpertRegistered($expertId)
+        *  9) registerToken($expertId, $token)
+        * 10) populate_J_Conflict_Expert_Choice($conflictId, $expertId)
+        * 11) populate_J_Conflict_Expert($conflictId, $expertId)
+        * 12) sendNotification($tokens, $message)
         *
         *****************************************************************************/
         public function getTermByConflict($conflictId){
@@ -258,6 +260,18 @@
             return $stmt->get_result();
         }
 
+        public function countSolvedConflicts($conflictId){
+            $stmt = $this->con->prepare("
+                SELECT COUNT(conflictId)
+                FROM J_Conflict_Expert
+                WHERE isSolved = 1 and conflictId = ?
+            ;");
+            $stmt->bind_param("s",$conflictId);        
+            $stmt->execute();
+            return $stmt->get_result()->fetch_assoc();
+        }
+
+
         public function submitDecision($choice, $writtenComment, $voiceComment){
             $stmt = $this->con->prepare("INSERT INTO `Choice` (`choiceId`,`choice`,`writtenComment`,`voiceComment`) VALUES (NULL, ?, ?, ?);");
             $stmt->bind_param("sss",$choice,$writtenComment,$voiceComment);
@@ -306,7 +320,7 @@
             }
         }
 
-        public function populate_J_Conflict_Expert($conflictId,$expertId){
+        public function populate_J_Conflict_Expert($conflictId, $expertId){
                      
             $isSolved = 1;
             $stmt = $this->con->prepare("
