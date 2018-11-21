@@ -14,8 +14,11 @@ require_once '../../includes/DataBaseOperations.php';
 
 	       if($result == 1 ){
 
+               $db->setTasksToExpert();
 	           $response['error'] = false;
                $response['message'] = "The user was registered succesfully!";
+
+
 
 	       } else if($result == 2 ) {
 
