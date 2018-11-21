@@ -278,7 +278,7 @@
                 FROM J_Conflict_Expert
                 WHERE isSolved = 0 and expertId = ?
             ;");
-            $stmt->bind_param("s",$conflictId);        
+            $stmt->bind_param("s",$expertId);        
             $stmt->execute();
             return $stmt->get_result()->fetch_assoc();
         }       
