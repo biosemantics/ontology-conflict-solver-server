@@ -166,13 +166,14 @@
         *  3) getOptionImages($termId)
         *  4) getSolvedTasks($expertId)
         *  5) getUnsolvedTasks($expertId)
-        *  6) countSolvedConflicts($conflictId){
-        *  7) submitDecision($choice, $writtenComment, $voiceComment)
-        *  8) isExpertRegistered($expertId)
-        *  9) registerToken($expertId, $token)
-        * 10) populate_J_Conflict_Expert_Choice($conflictId, $expertId)
-        * 11) populate_J_Conflict_Expert($conflictId, $expertId)
-        * 12) sendNotification($tokens, $message)
+        *  6) countSolvedConflicts($conflictId)
+        *  7) countUnsolvedConflictsByExpert($expertId)
+        *  8) submitDecision($choice, $writtenComment, $voiceComment)
+        *  9) isExpertRegistered($expertId)
+        * 10) registerToken($expertId, $token)
+        * 11) populate_J_Conflict_Expert_Choice($conflictId, $expertId)
+        * 12) populate_J_Conflict_Expert($conflictId, $expertId)
+        * 13) sendNotification($tokens, $message)
         *
         *****************************************************************************/
         public function getTermByConflict($conflictId){
@@ -270,6 +271,17 @@
             $stmt->execute();
             return $stmt->get_result()->fetch_assoc();
         }
+
+         public function countUnsolvedConflictsByExpert($expertId){
+            $stmt = $this->con->prepare("
+                SELECT COUNT(conflictId)
+                FROM J_Conflict_Expert
+                WHERE isSolved = 0 and expertId = ?
+            ;");
+            $stmt->bind_param("s",$conflictId);        
+            $stmt->execute();
+            return $stmt->get_result()->fetch_assoc();
+        }       
 
 
         public function submitDecision($choice, $writtenComment, $voiceComment){
