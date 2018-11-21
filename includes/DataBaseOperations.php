@@ -135,20 +135,25 @@
             $stmt->execute();
             return $stmt->get_result();
         }
-        
-        public function setTasksToExpert(){
 
+        public function setTasksToExpert(){
             $expertId = mysqli_insert_id($this->con);
             $isSolved = 0;
             $stmt = $this->con->prepare("
-                INSERT INTO `J_Conflict_Expert` (`conflictId`,`expertId`,`isSolved`) VALUES (?, ?, ?)
                 SELECT
                     Conflict.conflictId as conflictId 
                 FROM Conflict 
             ");
-            $stmt->bind_param("sss",$conflictId, $expertId), $isSolved;
             $stmt->execute();
-            return $stmt->get_result();
+            $results= $stmt->get_result();
+
+            while( $conflictId = $results->fetch_assoc()) {
+                $stmt = $this->con->prepare("
+                    INSERT INTO `J_Conflict_Expert` (`conflictId`,`expertId`,`isSolved`) VALUES (?, ?, ?);
+                ");
+                $stmt->bind_param("sss",$conflictId['conflictId'],$expertId,$isSolved);
+                $stmt->execute();
+            }
         }
 
         /****************************************************************************
