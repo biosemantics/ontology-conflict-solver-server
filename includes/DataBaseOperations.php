@@ -124,13 +124,26 @@
             return $stmt->get_result()->fetch_assoc();
         }
 
-        public function getExpertsByConflict($conflictId, $expertId){
+        public function getExpertsTokenByConflict($conflictId, $expertId){
             $stmt = $this->con->prepare("
                 SELECT
                     Expert.token as token 
                 FROM Expert 
                 JOIN J_Conflict_Expert on J_Conflict_Expert.expertId = Expert.expertId 
                 WHERE J_Conflict_Expert.conflictId = ? AND Expert.expertId != ?
+            ");
+            $stmt->bind_param("ss",$conflictId, $expertId);
+            $stmt->execute();
+            return $stmt->get_result();
+        }
+
+        public function getTokenByExpertId($expertId){
+            $stmt = $this->con->prepare("
+                SELECT
+                    Expert.token as username,
+                    Expert.token as token 
+                FROM Expert 
+                WHERE Expert.expertId != ?
             ");
             $stmt->bind_param("ss",$conflictId, $expertId);
             $stmt->execute();
@@ -146,7 +159,7 @@
                 FROM Conflict 
             ");
             $stmt->execute();
-            $results= $stmt->get_result();
+            $results = $stmt->get_result();
 
             while( $conflictId = $results->fetch_assoc()) {
                 $stmt = $this->con->prepare("
@@ -155,6 +168,7 @@
                 $stmt->bind_param("sss",$conflictId['conflictId'],$expertId,$isSolved);
                 $stmt->execute();
             }
+            return $expertId; 
         }
 
         /****************************************************************************
