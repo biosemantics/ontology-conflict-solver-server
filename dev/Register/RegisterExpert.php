@@ -15,23 +15,6 @@ require_once '../../includes/DataBaseOperations.php';
 	       if($result == 1 ){
 
                $expertId = $db->setTasksToExpert();
-               $result = getTokenByExpertId($expertId);
-
-               if(mysqli_num_rows($result) > 0 ){
-
-                    // Output the data of each row
-                    while($row = $result->fetch_assoc()){
-                        $token   = $row['token'];
-                        $username   = $row['username'];
-                    }
-                }
-
-                $text = $rowUsername['username'] . "You have new tasks!";
-
-                $message = array("message" => $text);
-                $message_status = $db->sendNotification($token, $message);
-
-
 	           $response['error'] = false;
                $response['message'] = "The user was registered succesfully!";
 
