@@ -4,6 +4,7 @@ require_once '../../includes/DataBaseOperations.php';
 
 $response = array(); 
 
+
 if($_SERVER['REQUEST_METHOD']=='POST'){
 
     $choice         = $_POST['choice'];
@@ -15,7 +16,6 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $resultSubmitDecision = $db->submitDecision($choice, $_POST['writtenComment'], $_POST['voiceComment']);
 
     if($resultSubmitDecision == 1){
-    	
         $conflictId = (int)$_POST['conflictId'];
         $expertId   = (int)$_POST['expertId'];
                     
@@ -27,10 +27,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
             if($resultSubmitDecision == 1){
 
-           	    $response['error'] = false;
-           	    $response['message'] = "Submission Successful";
+                $response['error'] = false;
+                $response['message'] = "Submission Successful";
 
-                $result = $db->getExpertsByConflict($conflictId, $expertId);	
+                $result = $db->getExpertsTokenByConflict($conflictId, $expertId);	
                 $tokens = array();
 
                 if(mysqli_num_rows($result) > 0 ){
@@ -48,30 +48,26 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
                 $message = array("message" => $text);
                 $message_status = $db->sendNotification($tokens, $message);
-//                echo $message_status;   
-
-
 
             } else {
 
            	    $response['error'] = true;
-           	    $response['message'] = "Submission Failed";		
+           	    $response['message'] = "Submission Failed1";		
 
            	}
 
         } else {
 
           $response['error'] = true;
-          $response['message'] = "Submission Failed";   
+          $response['message'] = "Submission Failed2";   
 
         }
 
     } else {
 
       $response['error'] = true;
-      $response['message'] = "Submission Failed";		
+      $response['message'] = "Submission Failed3";		
 
     }
 }
-
 echo json_encode($response);
