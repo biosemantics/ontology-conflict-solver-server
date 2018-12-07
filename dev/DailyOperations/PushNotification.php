@@ -12,7 +12,6 @@
 			$tokens[] = $row["token"];
 		}
 	}
-
 	$message = array("message" => " Conflict Solver has an update");
 	$message_status = $db->sendNotification($tokens, $message);
 	echo $message_status;
