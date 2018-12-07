@@ -362,6 +362,14 @@
             }
         }
 
+        public function getAllTokens(){
+                     
+            $stmt = $this->con->prepare("SELECT token FROM Expert");
+             $stmt->execute();
+            return $stmt->get_result();
+        }
+
+
         public function sendNotification($tokens, $message){
             $url = 'https://fcm.googleapis.com/fcm/send';
             $fields = array('registration_ids' => $tokens,
