@@ -16,19 +16,18 @@ require_once '../../includes/DataBaseOperations.php';
 
                $expertId = $db->setTasksToExpert();
 	           $response['error'] = false;
-               $response['message'] = "The user was registered succesfully!";
-
-
-
-	       } else if($result == 2 ) {
-
-	       	   $response['error'] = true;
-               $response['message'] = "An error has occurred, please try again!";
+			   $response['message'] = "The user was registered succesfully!";
+			   $response['expertId'] = $expertId;
 
 	       } else if($result == 0){
 
                $response['error'] = true; 
 			   $response['message'] = "The username or email are already in use, please choose a different email or username";	
+	       } else if($result == 2 ) {
+
+	       	   $response['error'] = true;
+               $response['message'] = "An error has occurred, please try again!";
+
 	       }
                
 		} else {

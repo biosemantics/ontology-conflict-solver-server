@@ -56,6 +56,6 @@ CREATE TABLE `Option_` (
 insert  into `Option_`(`optionId`,`term`,`definition`,`picture`) values (1,'shape','Overall two- or three – dimensional form or aspect thereof, e.g., rounded, spheroid, folded, folding, incurling.',NULL),(2,'architecture','The organization of parts that conform a complex structure and may dictate the form at a macro or micro-morphological level. Differentiate this category from Arrangement, Shape, and Structure. Architecture emphasizes the composition of an organ (have or have not a part) and the position of its components in it, e.g. antherless, bimucronate; Arrangement emphasizes the placement of similar organs in space, e.g. clustered, alternate; Shape is the appearance,e.g. rounded. ',NULL),(3,'texture','Substantial properties as perceived by visual and tactile senses, e.g. bony, fleshy, leathery, papery, cartilaginous. Differentate this category from Pubescence, Relief, and Coating.',NULL),(4,'linear','A shape quality inhering in a bearer by virtue of the bearer\'s being narrow, with the two opposite margins parallel. ',NULL),(5,'filamentous','bearing filaments',NULL);
 
 
-insert  into `J_Conflict_ConfusingTerm`(`conflictId`,`termId`) values (1,1),(2,2),(3,3),(4,4);
+insert  into `J_Conflict_ConfusingTerm`(`termId`,`termId`) values (1,1),(2,2),(3,3),(4,4);
 
 
