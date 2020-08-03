@@ -16,6 +16,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
     $db = new DataBaseOperations();
 
+    $db->deleteDeclinedDecision($termId, $expertId);
+
+    $db->deleteCurrentDecisions($termId, $expertId);
+
     $resultSubmitDecision = $db->submitDecision($termId, $expertId, $choice, $_POST['writtenComment'], $_POST['voiceComment']);
 
     if($resultSubmitDecision == 1){

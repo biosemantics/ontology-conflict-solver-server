@@ -4,6 +4,8 @@ require_once '../../includes/DataBaseOperations.php';
 $sentences = array(); 
 $definitions = array(); 
 $approveData = array();
+$comments = array();
+$curComment = "";
 
     if($_SERVER['REQUEST_METHOD'] == 'GET'){
         
@@ -26,7 +28,8 @@ $approveData = array();
             $id   = $row['id'];
             $definition   = $row['definition'];
             $definitions[] = array("id"=>$id,
-                            "definition"=>$definition);
+                            "definition"=>$definition,
+                            "expertId"=>$row['expertId']);
         }
         
         $result = $db->getApproveData($_GET['termId'], $_GET['expertId']);
@@ -38,10 +41,26 @@ $approveData = array();
             $approveData[] = array("sentenceId"=>$sentenceId,
                             "definitionId"=>$definitionId);
         }
+
+        $commentsResult = $db->getApproveTermCommentsByTermId($_GET['termId']);
+        while ($row = $commentsResult->fetch_assoc()) {
+            if ($row['comment'] && $row['comment'] != '') {
+                if ($row['expertId'] != $_GET['expertId']) {
+                    $comments[] = array("comment"=>$row['comment']);
+                } else {
+                    $curComment = $row['comment'];
+                }
+            }
+        }
+
+        $termDeclined = $db->isTermDeclinedByExpert($_GET['termId'], $_GET['expertId']);
         
     }
     echo json_encode(array("sentence"=>$sentences,
                         "definition"=>$definitions,
                         "approveData"=>$approveData,
+                        "comments"=>$comments,
+                        "termDeclined"=>$termDeclined,
+                        "curComment"=>$curComment
         ));
 ?>

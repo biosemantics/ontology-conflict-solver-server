@@ -8,7 +8,8 @@ $definitions = array();
 
         $termId = $_GET['termId'];
         $expertId = $_GET['expertId'];
-        $db->addDefinition($termId, $expertId, $_GET['definition']);
+        $definitionId = $_GET['id'];
+        $db->removeDefinition($definitionId);
 
         $result = $db->getDefinitions($termId, $expertId);
         $data = [];
