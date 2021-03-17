@@ -214,7 +214,9 @@ $sentences = array();
             if ($row['comment'] && $row['comment'] != '') {
                 if ($row['expertId'] != $_GET['expertId']) {
                     $comments[] = array("expertId"=>$row['expertId'],
-                                        "comment"=>$row['comment']);
+                                        "comment"=>$row['comment'],
+                                        "username"=>$row['username']
+                                    );
                 } else {
                     $curComment = $row['comment'];
                 }

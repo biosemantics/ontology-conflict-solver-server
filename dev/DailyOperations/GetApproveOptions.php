@@ -46,7 +46,10 @@ $curComment = "";
         while ($row = $commentsResult->fetch_assoc()) {
             if ($row['comment'] && $row['comment'] != '') {
                 if ($row['expertId'] != $_GET['expertId']) {
-                    $comments[] = array("comment"=>$row['comment']);
+                    $comments[] = array(
+                        "comment"=>$row['comment'],
+                        "username"=>$row['username']
+                    );
                 } else {
                     $curComment = $row['comment'];
                 }

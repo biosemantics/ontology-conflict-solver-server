@@ -54,7 +54,10 @@ $response = array();
         while ($row = $reasonResult->fetch_assoc()) {
             if ($row['reason'] && $row['reason'] != '') {
                 if ($row['expertId'] != $_GET['expertId']) {
-                    $reasons[] = array("comment" => $row['reason']);
+                    $reasons[] = array(
+                        "comment" => $row['reason'],
+                        "username" => $row['username']
+                    );
                 } else {
                     $curReason = $row['reason'];
                 }

@@ -1275,10 +1275,11 @@
         public function getApproveTermCommentsByTermId($termId) {
             $stmt = $this->con->prepare("
             SELECT DISTINCT
-                synonymsolution.comment as comment, synonymsolution.expertId as expertId
+                synonymsolution.comment as comment, synonymsolution.expertId as expertId, expert.username as username
             FROM confusingterm
                 INNER JOIN sentence on confusingterm.termId = sentence.termId
                 INNER JOIN synonymsolution on sentence.id = synonymsolution.sentenceId
+                INNER JOIN expert on expert.expertId = synonymsolution.expertId
             WHERE sentence.termId = ?
             ");
             $stmt->bind_param("i", $termId);

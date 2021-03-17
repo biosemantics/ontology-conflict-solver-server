@@ -94,7 +94,10 @@ $response = array();
         while ($row = $commentsResult->fetch_assoc()) {
             if ($row['writtenComment'] && $row['writtenComment'] != '') {
                 if ($row['expertId'] != $_GET['expertId']) {
-                    $comments[] = array("comment"=>$row['writtenComment']);
+                    $comments[] = array(
+                        "comment"=>$row['writtenComment'],
+                        "username"=>$row['username']
+                    );
                 } else {
                     $curComment = $row['writtenComment'];
                 }
